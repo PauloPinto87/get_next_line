@@ -6,7 +6,7 @@
 /*   By: paulo <paulo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 17:46:14 by paulo             #+#    #+#             */
-/*   Updated: 2025/01/08 13:24:28 by paulo            ###   ########.fr       */
+/*   Updated: 2025/01/08 16:42:12 by paulo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ typedef struct s_node
 }	t_node;
 
 char	*get_next_line(int fd);
-int		create_list(t_node **root, int fd);
-int		found_newline(char *buff);
-char	*group_list(t_node **root, int len_line);
-void	ft_free_mem(t_node **root);
+void	insert_list(t_node **root_list, char *buff);
+char	*search_newline(t_node **root_list, char *buff);
+char	*get_line(t_node	**root_list, int len_line);
+void 	list_free(t_node **root_list);
 
 #endif
