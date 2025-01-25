@@ -6,85 +6,121 @@
 /*   By: paulo <paulo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 13:14:37 by paulo             #+#    #+#             */
-/*   Updated: 2025/01/08 16:47:44 by paulo            ###   ########.fr       */
+/*   Updated: 2025/01/25 11:19:08 by paulo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	insert_list(t_node **root_list, char *buff)
+int	is_newline(char *buff)
+{
+	size_t	i;
+
+	i = 0;
+	while (buff[i] != '\0')
+	{
+		if (buff[i] == '\n')
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+char	*ft_strdup(const char *buff)
+{
+	size_t	len;
+	size_t	i;
+	char	*dest;
+
+	len = 0;
+	while (buff[len] != '\0')
+		len++;
+	dest = malloc(len + 1);
+	if (!dest)
+		return (NULL);
+	i = 0;
+	while (buff[i] != '\0')
+	{
+		dest[i] = buff[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+size_t	insert_end(t_node **root, char *buff)
 {
 	t_node	*new_node;
 	t_node	*current_node;
+	size_t	i;
 
+
+	i = 1;
 	new_node = malloc(sizeof(t_node));
-	new_node->str = buff;
-	new_node->next = NULL; 
-	if (*root_list == NULL)
-	{		
-		*root_list = new_node;
-		return ;
+	if (!new_node)
+		return (0);
+	new_node->next = NULL;
+	new_node->str = ft_strdup(buff);
+	if (new_node->str == NULL)
+	{
+		free(new_node);
+		return (0);
 	}
-	current_node = *root_list;
+	if (*root == NULL)
+	{
+		*root = new_node;
+		//printf("current_node->str = %s", (*root)->str);
+		return (i);
+	}
+	current_node = *root;
 	while (current_node->next != NULL)
+	{
 		current_node = current_node->next;
+		i++;
+	}
 	current_node->next = new_node;
+
+	return (++i);
 }
 
-char	*get_line(t_node	**root_list, int len_line)
+char	*create_line(t_node **root, size_t qnt_node, size_t qnt_char_newline)
 {
-	t_node *current_node;
-	char	*line;
-	int		i;
+	t_node	*current_node;
+	size_t		i;
+	size_t		j;
+	char	*line_return;
 
-	if (*root_list == NULL)
+	//printf("qnt_node = %ld and qnt_char_newline = %ld\n", qnt_node, qnt_char_newline);
+	line_return = malloc(((qnt_node - 1) * BUFFER_SIZE) + qnt_char_newline + 1);
+	if (!line_return)
 		return (NULL);
-	current_node = *root_list;
-	while(current_node != NULL)
+	i = 0;
+	current_node = *root;
+	while (current_node != NULL)
 	{
-		i = 0;
-		while (current_node->str[i] != '\0')
+		j = 0;
+		while (current_node->str[j] != '\0' && i < qnt_char_newline)
 		{
-			if (current_node->str[i] == '\n')
-				return (line);
+			//printf("i = %dd - j = %d\n", i, j);
+			line_return[i] = current_node->str[j];
+			j++;
 			i++;
 		}
 		current_node = current_node->next;
 	}
-	return (NULL)
+	line_return[i] = '\0';
+	//printf("Return line is %s\n", line_return);
+	return (line_return);
 }
 
-char	*search_newline(t_node **root_list, char *buff)
-{
-	static int	len_line = 0;
-	int			aux;
-	int			i;
-	
-	if (!buff)
-		return (0);
-	i = 0;
-	while (buff[i] != '\0')
-	{
-		len_line++;
-		if (buff[i] == '\n')
-		{
-			aux = len_line;
-			len_line = 0;
-			return (take_line(&root_list, aux));
-		}
-		i++;
-	}
-	return (NULL);
-}
-
-void list_free(t_node **root_list)
+void	prepare_newline(t_node **root, char *buff)
 {
 	t_node	*current_node;
 	t_node	*aux;
-	
-	if (*root_list == NULL)
-		return ;
-	current_node = *root_list;
+	int		i;
+	int		j;
+
+	current_node = *root;
 	while (current_node != NULL)
 	{
 		aux = current_node->next;
@@ -92,4 +128,16 @@ void list_free(t_node **root_list)
 		free(current_node);
 		current_node = aux;
 	}
+	*root = NULL;
+	i = is_newline(buff) + 1;
+	j = 0;
+	while (buff[i] != '\0')
+	{
+		buff[j] = buff[i];
+		i++;
+		j++;
+	}
+	buff[j] = '\0';
+	//printf("is_newline in prepare_newline %d\n", i);
+	
 }
