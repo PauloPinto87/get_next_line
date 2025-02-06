@@ -6,7 +6,7 @@
 /*   By: paulo <paulo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 17:46:14 by paulo             #+#    #+#             */
-/*   Updated: 2025/01/25 09:18:18 by paulo            ###   ########.fr       */
+/*   Updated: 2025/02/05 12:21:04 by paulo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ typedef struct s_node
 }	t_node;
 
 char	*get_next_line(int fd);
-int		is_newline(char *buff);
-size_t	insert_end(t_node **root, char *buff);
-char	*ft_strdup(const char *buff);
-char	*create_line(t_node **root, size_t qnt_node, size_t qnt_char_newline);
-void	prepare_newline(t_node **root, char *buff);
+t_node	*create_node(char *buff);
+int		verify_buff(char *str);
+int		insert_end(t_node **root, char *buff);
+char	*create_return_line(t_node **root, int qnt_node, char *buff);
+void	prepare_next_call(t_node **root, char *buff);
 
 #endif
