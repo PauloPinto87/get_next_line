@@ -6,130 +6,87 @@
 /*   By: paulo <paulo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 13:14:37 by paulo             #+#    #+#             */
-/*   Updated: 2025/02/05 16:41:40 by paulo            ###   ########.fr       */
+/*   Updated: 2025/02/10 13:02:36 by paulo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-t_node	*create_node(char *buff)
+size_t	ft_strlen(const char *str)
 {
-	t_node	*new_node;
-	char	*new_str;
-	size_t	i;
-	size_t	j;
+	size_t	len;
 
-	new_node = malloc(sizeof(t_node));
-	if (!new_node)
-		return (NULL);
-	i = 0;
-	while (buff[i] != '\0')
-		i++;
-	new_str = malloc(i + 1);
-	if (!new_str)
-		return (NULL);
-	j = 0;
-	while (j < i)
-	{
-		new_str[j] = buff[j];
-		j++;
-	}
-	new_str[j] = '\0';
-	new_node->str = new_str;
-	return (new_node);	
+	if (!str)
+		return (0);
+	len = 0;
+	while (str[len] != '\0')
+		len++;
+	return (len);
 }
 
-
-int	verify_buff(char *str)
+int	verify_newline(char *line_return, char *buff)
 {
-	size_t	i;
+	int	newline_pos;
 
-	i = 0;
-	while (str[i])
-	{	
-		if (str[i] == '\n')
-			return (i);
-		i++;
+	newline_pos = 0;
+	while (line_return[newline_pos] != '\0')
+	{
+		if (line_return[newline_pos] == '\n')
+		{
+			prepare_nex_call(buff);
+			while (*line_return != '\n')
+				line_return++;
+			line_return++;
+			*line_return = '\0';
+			return (newline_pos);
+		}
+		newline_pos++;
 	}
 	return (-1);
 }
 
-int	insert_end(t_node **root, char *buff)
+void	prepare_nex_call(char *buff)
 {
-	t_node	*new_node;
-	t_node	*current_node;
-	int		qnt_node;
+	int	start;
+	int	end;
 
-	new_node = create_node(buff);
-	if (!new_node)
-		return (-1);
-	new_node->next = NULL;
-	if (*root == NULL)
-	{
-		*root = new_node;
-		return (1);
-	}
-	current_node = *root;
-	qnt_node = 1;
-	while (current_node->next != NULL)
-	{
-		current_node = current_node->next;
-		qnt_node++;
-	}
-	current_node->next = new_node;
-	return (++qnt_node);
-}
-
-void	prepare_next_call(t_node **root, char *buff)
-{
-	t_node	*current_node;
-	t_node	*aux;
-	int		len_str;
-
-	if (!root || !*root)
+	if (!buff)
 		return ;
-	current_node = *root;
-	while (current_node != NULL)
+	end = 0;
+	while (buff[end] != '\n' && buff[end] != '\0')
+		end++;
+	start = 0;
+	end++;
+	if (buff[end] == '\0')
 	{
-		aux = current_node->next;
-		free(current_node->str);
-		free(current_node);
-		current_node = aux;
+		buff[0] = '\0';
+		return ;
 	}
-	*root = NULL;
-	len_str = 0;
-	while (buff[len_str])
-		len_str++;
-	if ((len_str - 1) != verify_buff(buff) && verify_buff(buff) >= 0)
-		printf("Ainda existe conteudo no buff\n");
-	else
-		*buff = '\0';
-	printf("buff content = %s\n", buff);
-	printf("verify = %d and len_str = %d\n", verify_buff(buff), len_str - 1);
+	while (buff[end] != '\0' )
+		buff[start++] = buff[end++];
+	buff[start] = '\0';
 }
 
-char	*create_return_line(t_node **root, int qnt_node, char *buff)
+char	*ft_mod_strcat(char *dst, const char *src)
 {
-	t_node	*current_node;
-	char	*line_return;
+	int		dst_len;
+	int		src_len;
 	int		i;
-	int		j;
+	char	*new_str;
 
-	line_return = malloc(qnt_node * BUFFER_SIZE + 1);
-	if (!line_return)
-		return (NULL);
-	i = 0;
-	current_node = *root;
-	while (current_node != NULL)
-	{
-		j = 0;
-		while(current_node->str[j] != '\0' && current_node->str[j] != '\n')
-			line_return[i++] = current_node->str[j++];
-		if (current_node->str[j])
-			line_return[i++] = '\n';
-		current_node = current_node->next;
-	}
-	line_return[i] = '\0';
-	prepare_next_call(root, buff);
-	return (line_return);
+	dst_len = ft_strlen(dst);
+	src_len = ft_strlen(src);
+	new_str = malloc(dst_len + src_len + 1);
+	if (!new_str)
+		return (free(dst), NULL);
+	i = -1;
+	while (i++ < dst_len)
+		new_str[i] = dst[i];
+	i = -1;
+	while (i++ < src_len)
+		new_str[i + dst_len] = src[i];
+	new_str[dst_len + src_len] = '\0';
+	if (dst)
+		free(dst);
+	return (new_str);
 }
