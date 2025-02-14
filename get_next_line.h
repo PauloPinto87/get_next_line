@@ -6,7 +6,7 @@
 /*   By: paulo <paulo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 17:46:14 by paulo             #+#    #+#             */
-/*   Updated: 2025/02/10 13:01:31 by paulo            ###   ########.fr       */
+/*   Updated: 2025/02/13 16:44:55 by paulo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@
 # include <stdlib.h>
 
 char	*get_next_line(int fd);
-int		verify_newline(char *line_return, char *buff);
-size_t	ft_strlen(const char *str);
-char	*ft_mod_strcat(char *dst, const char *src);
-void	prepare_nex_call(char *buff);
+int		verify_newline(char *str);
+size_t	ft_strlen(char const *str);
+char	*ft_strljoin(char *line, char *buff, size_t len);
+size_t		ft_strlcpy(char *dst, const char *src, size_t size);
 
 #endif

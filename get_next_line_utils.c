@@ -6,87 +6,68 @@
 /*   By: paulo <paulo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 13:14:37 by paulo             #+#    #+#             */
-/*   Updated: 2025/02/10 13:02:36 by paulo            ###   ########.fr       */
+/*   Updated: 2025/02/13 16:46:22 by paulo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
+int	verify_newline(char *str)
 {
-	size_t	len;
+	int	i;
 
-	if (!str)
-		return (0);
-	len = 0;
-	while (str[len] != '\0')
-		len++;
-	return (len);
-}
-
-int	verify_newline(char *line_return, char *buff)
-{
-	int	newline_pos;
-
-	newline_pos = 0;
-	while (line_return[newline_pos] != '\0')
+	i = 0;
+	while (str[i] != '\0')
 	{
-		if (line_return[newline_pos] == '\n')
-		{
-			prepare_nex_call(buff);
-			while (*line_return != '\n')
-				line_return++;
-			line_return++;
-			*line_return = '\0';
-			return (newline_pos);
-		}
-		newline_pos++;
+		if (str[i] == '\n')
+			return (i);
+		i++;
 	}
 	return (-1);
 }
 
-void	prepare_nex_call(char *buff)
+size_t	ft_strlen(char const *str)
 {
-	int	start;
-	int	end;
+	size_t	i;
 
-	if (!buff)
-		return ;
-	end = 0;
-	while (buff[end] != '\n' && buff[end] != '\0')
-		end++;
-	start = 0;
-	end++;
-	if (buff[end] == '\0')
-	{
-		buff[0] = '\0';
-		return ;
-	}
-	while (buff[end] != '\0' )
-		buff[start++] = buff[end++];
-	buff[start] = '\0';
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
 }
 
-char	*ft_mod_strcat(char *dst, const char *src)
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	int		dst_len;
-	int		src_len;
-	int		i;
-	char	*new_str;
+	size_t	i;
 
-	dst_len = ft_strlen(dst);
-	src_len = ft_strlen(src);
-	new_str = malloc(dst_len + src_len + 1);
-	if (!new_str)
-		return (free(dst), NULL);
-	i = -1;
-	while (i++ < dst_len)
-		new_str[i] = dst[i];
-	i = -1;
-	while (i++ < src_len)
-		new_str[i + dst_len] = src[i];
-	new_str[dst_len + src_len] = '\0';
-	if (dst)
-		free(dst);
-	return (new_str);
+	i = 0;
+	if (size > 0)
+	{
+		while (i < size - 1 && src[i])
+		{
+			dst[i] = src[i];
+			i++;
+		}
+		dst[i] = '\0';
+	}
+	return (ft_strlen(src));
+}
+
+char	*ft_strljoin(char *line, char *buff, size_t len)
+{
+	char	*new_line;
+	size_t	line_len;
+
+	line_len = 0;
+	if (line)
+		line_len = ft_strlen(line);
+	new_line = malloc(line_len + len + 1);
+	if (!new_line)
+		return (NULL);
+	if (line)
+		ft_strlcpy(new_line, line, line_len + 1);
+	ft_strlcpy(new_line + line_len, buff, len + 1);
+	if (line)
+		free(line);
+	return (new_line);
 }
