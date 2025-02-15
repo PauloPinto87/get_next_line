@@ -6,7 +6,7 @@
 /*   By: paulo <paulo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 13:14:37 by paulo             #+#    #+#             */
-/*   Updated: 2025/02/13 16:46:22 by paulo            ###   ########.fr       */
+/*   Updated: 2025/02/15 15:30:33 by paulo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,10 @@ char	*ft_strljoin(char *line, char *buff, size_t len)
 	if (!new_line)
 		return (NULL);
 	if (line)
+	{
 		ft_strlcpy(new_line, line, line_len + 1);
-	ft_strlcpy(new_line + line_len, buff, len + 1);
-	if (line)
 		free(line);
+	}
+	ft_strlcpy(new_line + line_len, buff, len + 1);
 	return (new_line);
 }
