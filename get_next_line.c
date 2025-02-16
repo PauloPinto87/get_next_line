@@ -6,7 +6,7 @@
 /*   By: paulo <paulo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 16:29:20 by paulo             #+#    #+#             */
-/*   Updated: 2025/02/15 15:52:31 by paulo            ###   ########.fr       */
+/*   Updated: 2025/02/16 13:58:12 by paulo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,7 @@ char	*get_next_line(int fd)
 
 	line = NULL;
 	if (fd < 0 || read(fd, buff, 0) < 0 || BUFFER_SIZE <= 0)
-	{
-		buff[0] = '\0';
-		return (NULL);
-	}
+		return (buff[0] = '\0', NULL);
 	bytes_read = 1;
 	while (1)
 	{
@@ -36,14 +33,9 @@ char	*get_next_line(int fd)
 			buff[bytes_read] = '\0';
 		}
 		newline_index = verify_newline(buff);
+		line = append_line(buff, &line, newline_index);
 		if (newline_index >= 0)
-		{
-			line = ft_strljoin(line, buff, newline_index + 1);
-			ft_strlcpy(buff, buff + newline_index + 1, BUFFER_SIZE);
 			break ;
-		}
-		line = ft_strljoin(line, buff, ft_strlen(buff));
-		buff[0] = '\0';
 	}
 	return (line);
 }
