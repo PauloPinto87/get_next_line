@@ -6,7 +6,7 @@
 /*   By: paulo <paulo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 17:46:14 by paulo             #+#    #+#             */
-/*   Updated: 2025/02/16 13:47:25 by paulo            ###   ########.fr       */
+/*   Updated: 2025/03/04 11:38:55 by paulo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,6 @@ int		verify_newline(char *buff);
 size_t	ft_strlen(char const *str);
 char	*ft_strljoin(char *line, char *buff, size_t len);
 size_t	ft_strlcpy(char *dst, const char *src, size_t size);
-char	*append_line(char *buff, char **line, int newline_index);
+char	*build_line(char *buff, char **line, int nl_index, int bytes_read);
 
 #endif

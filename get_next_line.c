@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pahenri2 <pahenri2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paulo <paulo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 16:29:20 by paulo             #+#    #+#             */
-/*   Updated: 2025/03/03 16:01:37 by pahenri2         ###   ########.fr       */
+/*   Updated: 2025/03/04 11:47:04 by paulo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
 
 char	*get_next_line(int fd)
 {
@@ -22,27 +21,19 @@ char	*get_next_line(int fd)
 
 	line = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (buff[0] = '\0', NULL);
+		return ((buff[0] = '\0'), NULL);
 	bytes_read = 1;
-	while (1)
+	newline_index = -1;
+	while (bytes_read > 0 && newline_index < 0)
 	{
 		if (buff[0] == '\0')
 		{
 			bytes_read = read(fd, buff, BUFFER_SIZE);
-			if (bytes_read < 0)
-			{
-				if (line != NULL)
-					free(line);
-				return (NULL);
-			}
-			else if (bytes_read == 0)
-				break ;
-			buff[bytes_read] = '\0';
+			if (bytes_read >= 0)
+				buff[bytes_read] = '\0';
 		}
 		newline_index = verify_newline(buff);
-		line = append_line(buff, &line, newline_index);
-		if (newline_index >= 0)
-			break ;
+		line = build_line(buff, &line, newline_index, bytes_read);
 	}
 	return (line);
 }
